@@ -14,7 +14,7 @@ const allowedOrigins = [
     process.env.CLIENT_URL,
     'https://client-jiji-4747.vercel.app',
     'https://client-git-main-jiji-4747.vercel.app',
-    'https://client-tct70754m-jiji-4747.vercel.app',
+    'https://client-jsqedx7zv-jiji-4747.vercel.app',
     'http://localhost:5173'
 ].filter(Boolean);
 

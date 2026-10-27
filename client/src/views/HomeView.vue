@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import axios from 'axios';
+import api from '../services/api';
 
 const posts = ref([]);
 const loading = ref(true);
@@ -76,8 +76,7 @@ async function fetchPosts() {
   error.value = '';
 
   try {
-    const response = await axios.get('http://localhost:4000/posts');
-
+    const response = await api.get('/posts');
     const data = response.data;
 
     posts.value = Array.isArray(data)

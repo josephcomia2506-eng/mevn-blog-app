@@ -103,7 +103,7 @@
 <script setup>
 import { ref, reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
+import api from '../services/api';
 
 const router = useRouter();
 
@@ -157,15 +157,7 @@ async function createPost() {
       payload.image = form.image;
     }
 
-    const response = await axios.post(
-      'http://localhost:4000/posts',
-      payload,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await api.post('/posts', payload);
 
     successMessage.value = 'Your story has been published!';
 

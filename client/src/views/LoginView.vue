@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
+import api from '../services/api';
 import { setAuth } from '../Auth.js';
 
 const router = useRouter();
@@ -25,14 +25,11 @@ async function login() {
   loading.value = true;
 
   try {
-    const response = await axios.post(
-      'http://localhost:4000/users/login',
-      {
-        email: email.value.trim(),
-        password: password.value
-      }
-    );
-    
+    const response = await api.post('/users/login', {
+      email: email.value.trim(),
+      password: password.value
+    });
+
     const data = response.data;
 
     const token = data.accessToken || data.token;
@@ -44,7 +41,7 @@ async function login() {
       return;
     }
 
-    // Save authentication and update the reactive navbar state
+    // Save authentication and update the reactive navbar state.
     setAuth(token, userData);
 
     const role = String(

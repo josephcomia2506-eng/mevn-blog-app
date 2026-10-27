@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
+import api from '../services/api';
 
 const router = useRouter();
 
@@ -34,17 +34,15 @@ async function register() {
   loading.value = true;
 
   try {
-    await axios.post(
-      'http://localhost:4000/users/register',
-      {
-        name: name.value.trim(),
-        email: email.value.trim(),
-        password: password.value
-      }
-    );
+    await api.post('/users/register', {
+      name: name.value.trim(),
+      email: email.value.trim(),
+      password: password.value
+    });
 
     await router.push('/login');
   } catch (error) {
+    console.error('Registration error:', error);
     errorMessage.value =
       error.response?.data?.message ||
       error.response?.data?.error ||

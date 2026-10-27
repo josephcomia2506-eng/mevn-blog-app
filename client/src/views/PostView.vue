@@ -75,7 +75,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import axios from 'axios';
+import api from '../services/api';
 
 const route = useRoute();
 
@@ -93,7 +93,12 @@ const authorName = computed(() => {
 });
 
 const publishedDate = computed(() => {
-  return post.value?.createdAt || post.value?.publishedAt || post.value?.date || '';
+  return (
+    post.value?.createdAt ||
+    post.value?.publishedAt ||
+    post.value?.date ||
+    ''
+  );
 });
 
 function formatDate(date) {
@@ -118,12 +123,9 @@ async function fetchPost() {
   post.value = null;
 
   try {
-    const response = await axios.get(
-      `http://localhost:4000/posts/${route.params.id}`
-    );
+    const response = await api.get(`/posts/${route.params.id}`);
 
-    // Supports APIs that return either the post directly
-    // or wrap it inside a "post" or "data" property.
+    // Support APIs that return the post directly or wrap it.
     const result = response.data;
     post.value = result?.post || result?.data || result;
 
@@ -138,7 +140,7 @@ async function fetchPost() {
     } else {
       error.value =
         err.response?.data?.message ||
-        'Unable to load this article. Please check that your server is running.';
+        'Unable to load this article. Please try again.';
     }
   } finally {
     loading.value = false;

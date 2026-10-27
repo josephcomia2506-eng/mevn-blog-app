@@ -125,7 +125,7 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import axios from 'axios';
+import api from '../services/api';
 
 const route = useRoute();
 const router = useRouter();
@@ -173,15 +173,7 @@ async function fetchPost() {
   }
 
   try {
-    const response = await axios.get(
-      `http://localhost:4000/posts/${postId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
+    const response = await api.get(`/posts/${postId}`);
     const post = getPostData(response.data);
 
     if (!post || !post.title) {
@@ -232,15 +224,7 @@ async function updatePost() {
       image: form.image || '',
     };
 
-    await axios.put(
-      `http://localhost:4000/posts/${postId}`,
-      payload,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    await api.put(`/posts/${postId}`, payload);
 
     successMessage.value = 'Your changes have been saved!';
 

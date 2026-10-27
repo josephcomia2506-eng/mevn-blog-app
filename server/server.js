@@ -10,8 +10,22 @@ const cors = require('cors');
 
 const app = express();
 
+const allowedOrigins = [
+    process.env.CLIENT_URL,
+    'https://client-jiji-4747.vercel.app',
+    'https://client-git-main-jiji-4747.vercel.app',
+    'https://client-tct70754m-jiji-4747.vercel.app',
+    'http://localhost:5173'
+].filter(Boolean);
+
 app.use(cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+
+        return callback(new Error('Not allowed by CORS'));
+    },
     credentials: true
 }));
 
